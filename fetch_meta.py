@@ -81,11 +81,11 @@ if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
                         "client_x509_cert_url": os.getenv("CREDENTIAL_CLIENT_X509_CERT_URL"),
                         "universe_domain": os.getenv("CREDENTIAL_UNIVERSE_DOMAIN")}
                 gc = gspread.service_account_from_dict(credentials)
-                spreadsheet = gc.open('ReachOutTracker')
-                worksheet = spreadsheet.get_worksheet(1)
+                spreadsheet = gc.open('Paid Report_IN')
+                worksheet = spreadsheet.get_worksheet(5)
                 yesterday_date = (datetime.now() - timedelta(days=1)).strftime('%m/%d')
                 week , month = week_of_month_corrected(yesterday_date)
-                worksheet.append_row([week,month,(date.today() - timedelta(1)).isoformat(),campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs])
+                worksheet.append_row([week,month,(date.today() - timedelta(1)).isoformat(),"","META","Facebook Ads",campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs])
             
 
 # for campaign in campaigns :
