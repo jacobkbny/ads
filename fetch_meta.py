@@ -31,7 +31,7 @@ my_account = AdAccount('act_'+AD_ACCOUNT_ID)
 # campaigns = my_account.get_campaigns()
 
 # for campaign in campaigns :
-campaign = Campaign('23855434919500430') #ASIA_AOS_IN_NEW
+campaign = Campaign(os.getenv("ASIA_AOS_IN_NEW")) #ASIA_AOS_IN_NEW
         # Fetch the Campaign details
 campaign.remote_read(fields=[Campaign.Field.name])
 
