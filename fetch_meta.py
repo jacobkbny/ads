@@ -14,7 +14,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import os
 from dotenv import load_dotenv
 from .week_month import week_of_month_corrected
-
+from datetime import datetime
 load_dotenv()
 my_app_id = os.getenv("MY_APP_ID")
 my_app_secret = os.getenv("MY_APP_SECRET")
@@ -77,18 +77,6 @@ if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
                         "auth_provider_x509_cert_url": os.getenv("CREDENTIAL_AUTH_PROVIDER_X509_CERT_URL"),
                         "client_x509_cert_url": os.getenv("CREDENTIAL_CLIENT_X509_CERT_URL"),
                         "universe_domain": os.getenv("CREDENTIAL_UNIVERSE_DOMAIN")}
-                # credentials = {
-                #         "type": "service_account",
-                #         "project_id": "emailtracker-393823",
-                #         "private_key_id": "dd5891be6a27a0282bf76dda9401affb1ffb397e",
-                #         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDVU/zf2Im3AIyH\neBxQWDnBKS97DfSJ8DP9bHqck+o8Y8a5XNosmv7wP/dgEyyPsPXy8b968Ot3NTva\n2NYUFrKI6Y7hMuyDnn08YWz185dlvjK9BSAD8ldx3OiXnAnzIWf/FrEzwrGpToLu\n61QCrldvfxGBIKPGSitlHnk+SgfGi2UY6QHUFLyvKPB2wxrmF4dDRI7AmIsS8GRh\nkiNu1hHs2lqncT7ZWdT5oYjlGajATuqLRWLgpnODtjU7S4yxgCtMuk+GdqX7rSLe\nW/ddE3Hls9hmZ1LwibLOOVa7Uia8Sm6XLGSxoSAC3NyFmQZoxHWwVyTaNJA+Lzb0\nQtm1jxTZAgMBAAECggEACt0jmBy1arHm9jEqM/dCPbGEvv4HcYzfgOzo05d+ysOE\nB8WQQMxF5mNDjEt9rfWjmNMx3qdtPl1iJnN7d3tubSWDxrkqrUtBcnU9sMrOb3p/\np/ueVUUeqehHmgzyvsR5QNbdgFbOaGJcraEjXp2VS1LLx+krHfqB+jzSjNcFTVmN\nJtczibX8hNqj6AnCqd6Fm7zTNqN2CJH6K4iobLDWFW03Nnr0g02l6Oqf1A4Qg3Si\nIbzYu7SopM9/BidGzi6e/1IUoC6/AO1APvU6tlj+i9Huqf71flYCyOd703GDuh5M\nCEFbneC7xmssJCWFJTE5AirIroBttgVY3rH3sn3qlwKBgQDtefn5hwS9LijbJAId\n38cps7Vb+ZT9kOx8ayWN1uSy7Sa44adrujkQv3VeD8YPwb2fviuOG0NoiNscCx6k\nc6f+PRBEV/1hmmPhJNaRL5PgmF7RLWKGo4e6tbYPyHCxCMmwbvLKTb60ObjL99IQ\noNqbsCpBhByRyQN/oiFdZTu1KwKBgQDl986E6eHXyI2VGUBXELtBHzs2CkUfINSP\nrODLVhxXuunZ3dxPl7HMMxMkm0UOlI0a6MrxdFGkgWwomB/yhenhgxkTtr+XKzqE\nLDvnTZ8Z41Qlt9buBysSwcc4JoPKfMXNpbisW/UCkwe3yF3kMwp5SQWWua+Bs8uT\na4hHAezkCwKBgHFWW7V5eQuI8jrUTqZPXNBMUmwZC8CQ4CzpPj0ZqIC0qlxmZe8G\nK6IQnkVMJezzPDr3GfZykJNdbaVOsUsvX6f5IMBddjKU6sJTQIx+NodkcSxICtPT\nTD4R51hVA2OanBe2e+2NeUyul8HQ/tKs0minhSNLmA8D7sWFbYMTg5GNAoGAWBti\nR3AoM/lFrWs4SGNDqwahM+opY2y7o7RTh/Qc9cvKDsu+vcvbteWXnv3SLmzhxv6L\nyoiLQyDG5KKsEsoVum307KWmr+9DAyLDbLJDk7KSKcVOlnGuoggWIMA43BqD2m90\n2qx8qZjVaydcObMIf0Fn38CSqnnNNFUNqE7niNMCgYEA3SYVgw5sx+b9EHuKxUxj\njKEytOVlc19mn5qzFhN0/pOxkEV2r5bo7Z0USWQdAk7QqxyO9FsA/O8zaqTXXExt\nlMM1YB0GVELJ09N7htsBsxuPbEf0seELeMTnKcMNuRobketyoUeKDMLYmZkUuXyF\nSAYDhZco+1XBj/ZQ3ULIJx4=\n-----END PRIVATE KEY-----\n",
-                #         "client_email": "emailtracker@emailtracker-393823.iam.gserviceaccount.com",
-                #         "client_id": "118034276744647254656",
-                #         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                #         "token_uri": "https://oauth2.googleapis.com/token",
-                #         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                #         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/emailtracker%40emailtracker-393823.iam.gserviceaccount.com",
-                #         "universe_domain": "googleapis.com"}
                 gc = gspread.service_account_from_dict(credentials)
                 spreadsheet = gc.open('ReachOutTracker')
                 worksheet = spreadsheet.get_worksheet(1)
