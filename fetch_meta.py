@@ -13,7 +13,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
 from dotenv import load_dotenv
-from .week_month import week_of_month_corrected
+from week_month import week_of_month_corrected
 from datetime import datetime
 load_dotenv()
 my_app_id = os.getenv("MY_APP_ID")
@@ -33,8 +33,11 @@ my_account = AdAccount('act_'+AD_ACCOUNT_ID)
 
 # for campaign in campaigns :
 campaign = Campaign(os.getenv("ASIA_AOS_IN_NEW")) #ASIA_AOS_IN_NEW
+
+# use Object(id).api_get() instead
         # Fetch the Campaign details
-campaign.remote_read(fields=[Campaign.Field.name])
+campaign.api_get(fields=[Campaign.Field.name])
+# campaign.remote_read(fields=[Campaign.Field.name])
 
     # print(f"Campaign ID: {campaign[Campaign.Field.id]}, Name: {campaign[Campaign.Field.name]}")
 if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
