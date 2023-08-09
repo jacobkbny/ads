@@ -13,6 +13,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
 from dotenv import load_dotenv
+from .week_month import week_of_month_corrected
 
 load_dotenv()
 my_app_id = os.getenv("MY_APP_ID")
@@ -91,7 +92,9 @@ if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
                 gc = gspread.service_account_from_dict(credentials)
                 spreadsheet = gc.open('ReachOutTracker')
                 worksheet = spreadsheet.get_worksheet(1)
-                worksheet.append_row([(date.today() - timedelta(1)).isoformat(),campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs])
+                yesterday_date = (datetime.now() - timedelta(days=1)).strftime('%m/%d')
+                week , month = week_of_month_corrected(yesterday_date)
+                worksheet.append_row([week,month,(date.today() - timedelta(1)).isoformat(),campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs])
             
 
 # for campaign in campaigns :
