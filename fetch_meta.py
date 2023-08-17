@@ -25,6 +25,7 @@ AD_ACCOUNT_ID = os.getenv("AD_ACCOUNT_ID")
 FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
 
 my_account = AdAccount('act_'+AD_ACCOUNT_ID)
+
 #     campaign.remote_read(fields=[Campaign.Field.name])
 #     if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
 #         print(f"Campaign ID: {campaign[Campaign.Field.id]}, Name: {campaign[Campaign.Field.name]}")
@@ -32,7 +33,7 @@ my_account = AdAccount('act_'+AD_ACCOUNT_ID)
 # campaigns = my_account.get_campaigns()
 
 # for campaign in campaigns :
-campaign = Campaign(os.getenv("ASIA_AOS_IN_NEW")) #ASIA_AOS_IN_NEW
+campaign = Campaign(os.getenv("ASIA_AOS_IN_RENEW")) #ASIA_AOS_IN_NEW 
 
 # use Object(id).api_get() instead
         # Fetch the Campaign details
@@ -40,35 +41,33 @@ campaign.api_get(fields=[Campaign.Field.name])
 # campaign.remote_read(fields=[Campaign.Field.name])
 
     # print(f"Campaign ID: {campaign[Campaign.Field.id]}, Name: {campaign[Campaign.Field.name]}")
-if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
-    campaign_name = campaign[Campaign.Field.name]
-            # Get the Ad Sets of the Campaign
-    adsets = campaign.get_ad_sets(fields=[AdSet.Field.name])
 
+campaign_name = campaign[Campaign.Field.name]
+            # Get the Ad Sets of the Campaign
+adsets = campaign.get_ad_sets(fields=[AdSet.Field.name])
             # For each Ad Set, get the insights
-    for adset in adsets:
-        params = {
+for adset in adsets:
+    params = {
                     'time_range': {
                         'since': (date.today() - timedelta(1)).isoformat(),
                         'until': (date.today() - timedelta(1)).isoformat(),
                     },
                 }
-        insights = adset.get_insights(params=params, fields=[AdsInsights.Field.impressions, AdsInsights.Field.clicks, AdsInsights.Field.spend, AdsInsights.Field.actions])
-        if insights:
-            impressions = insights[0][AdsInsights.Field.impressions] if AdsInsights.Field.impressions in insights[0] else 0
-            clicks = insights[0][AdsInsights.Field.clicks] if AdsInsights.Field.clicks in insights[0] else 0
-            spends = insights[0][AdsInsights.Field.spend] if AdsInsights.Field.spend in insights[0] else 0
-            conversions = insights[0][AdsInsights.Field.actions] if AdsInsights.Field.actions in insights[0] else 0
-            installs = 0
-            for conversion in conversions:
-                if conversion['action_type'] == 'mobile_app_install':
-                    installs = int(conversion['value'])
+    insights = adset.get_insights(params=params, fields=[AdsInsights.Field.impressions, AdsInsights.Field.clicks, AdsInsights.Field.spend, AdsInsights.Field.actions])
+    if insights:
+        impressions = insights[0][AdsInsights.Field.impressions] if AdsInsights.Field.impressions in insights[0] else 0
+        clicks = insights[0][AdsInsights.Field.clicks] if AdsInsights.Field.clicks in insights[0] else 0
+        spends = insights[0][AdsInsights.Field.spend] if AdsInsights.Field.spend in insights[0] else 0
+        conversions = insights[0][AdsInsights.Field.actions] if AdsInsights.Field.actions in insights[0] else 0
+        installs = 0
+        for conversion in conversions:
+            if conversion['action_type'] == 'mobile_app_install':
+                installs = int(conversion['value'])
                 #\t\t
-            if installs != 0:
+        if installs != 0:
                     # print(f"\tAd Set ID: {adset[AdSet.Field.id]}, Name: {adset[AdSet.Field.name]}")
-                    # print(f"Impressions: {impressions}, Clicks: {clicks}, Spend: {spends}, Conversion: {installs}")
-                print((date.today() - timedelta(1)).isoformat(),campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs)
-                credentials = {
+            print(f"Impressions: {impressions}, Clicks: {clicks}, Spend: {spends}, Conversion: {installs}")
+            credentials = {
                         "type": os.getenv("CREDENTIAL_TYPE"),
                         "project_id": os.getenv("CREDENTIAL_PROJECT_ID"),
                         "private_key_id": os.getenv("CREDENTIAL_PRIVATE_KEY_ID"),
@@ -80,12 +79,13 @@ if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
                         "auth_provider_x509_cert_url": os.getenv("CREDENTIAL_AUTH_PROVIDER_X509_CERT_URL"),
                         "client_x509_cert_url": os.getenv("CREDENTIAL_CLIENT_X509_CERT_URL"),
                         "universe_domain": os.getenv("CREDENTIAL_UNIVERSE_DOMAIN")}
-                gc = gspread.service_account_from_dict(credentials)
-                spreadsheet = gc.open('Paid Report_IN')
-                worksheet = spreadsheet.get_worksheet(5)
-                yesterday_date = (datetime.now() - timedelta(days=1)).strftime('%m/%d')
-                week , month = week_of_month_corrected(yesterday_date)
-                worksheet.append_row([week,month,(date.today() - timedelta(1)).isoformat(),"","META","Facebook Ads",campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs])
+            gc = gspread.service_account_from_dict(credentials)
+            spreadsheet = gc.open('Paid Report_IN')
+            worksheet = spreadsheet.get_worksheet(7)
+            yesterday_date = (datetime.now() - timedelta(days=1)).strftime('%m/%d')
+            week , month = week_of_month_corrected(yesterday_date)
+            worksheet.append_row([week,month,(date.today() - timedelta(1)).isoformat(),"아시아","aos","META","Facebook Ads",campaign_name,adset[AdSet.Field.name],"",impressions,clicks,spends,"",installs])
+            print((date.today() - timedelta(1)).isoformat(),campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs)
             
 
 # for campaign in campaigns :

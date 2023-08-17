@@ -25,15 +25,13 @@ my_access_token = os.getenv("MY_ACCESS_TOKEN")
 AD_ACCOUNT_ID = os.getenv("AD_ACCOUNT_ID")
 sleepy_time = 300
 FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
-
 my_account = AdAccount('act_'+AD_ACCOUNT_ID)
-
 campaigns = my_account.get_campaigns()
 for campaign in campaigns :
         # Fetch the Campaign details
     campaign.api_get(fields=[Campaign.Field.name])
-    # print(f"Campaign ID: {campaign[Campaign.Field.id]}, Name: {campaign[Campaign.Field.name]}")
-    if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
+    if str.endswith(campaign[Campaign.Field.name],"_renew"):
+        print(f"Campaign ID: {campaign[Campaign.Field.id]}, Name: {campaign[Campaign.Field.name]}")
         campaign_name = campaign[Campaign.Field.name]
                 # Get the Ad Sets of the Campaign
         adsets = campaign.get_ad_sets(fields=[AdSet.Field.name])
@@ -55,47 +53,31 @@ for campaign in campaigns :
                 for conversion in conversions:
                     if conversion['action_type'] == 'mobile_app_install':
                         installs = int(conversion['value'])
-                            #\t\t
                 if installs != 0:
-                            # print(f"\tAd Set ID: {adset[AdSet.Field.id]}, Name: {adset[AdSet.Field.name]}")
-                            # print(f"Impressions: {impressions}, Clicks: {clicks}, Spend: {spends}, Conversion: {installs}")
+                    # print(f"\tAd Set ID: {adset[AdSet.Field.id]}, Name: {adset[AdSet.Field.name]}")
+                    # print(f"Impressions: {impressions}, Clicks: {clicks}, Spend: {spends}, Conversion: {installs}")
                     print((date.today() - timedelta(1)).isoformat(),campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs)
-                            # credentials = {
-                            #     "type": os.getenv("CREDENTIAL_TYPE"),
-                            #     "project_id": os.getenv("CREDENTIAL_PROJECT_ID"),
-                            #     "private_key_id": os.getenv("CREDENTIAL_PRIVATE_KEY_ID"),
-                            #     "private_key": os.getenv("CREDENTIAL_PRIVATE_KEY"),
-                            #     "client_email": os.getenv("CREDENTIAL_CLIENT_EMAIL"),
-                            #     "client_id": os.getenv("CREDENTIAL_CLIENT_ID"),
-                            #     "auth_uri": os.getenv("CREDENTIAL_AUTH_URI"),
-                            #     "token_uri": os.getenv("CREDENTIAL_TOKEN_URI"),
-                            #     "auth_provider_x509_cert_url": os.getenv("CREDENTIAL_AUTH_PROVIDER_X509_CERT_URL"),
-                            #     "client_x509_cert_url": os.getenv("CREDENTIAL_CLIENT_X509_CERT_URL"),
-                            #     "universe_domain": os.getenv("CREDENTIAL_UNIVERSE_DOMAIN")
-                            #              }
-                            # gc = gspread.service_account_from_dict(credentials)
-                            # spreadsheet = gc.open('Paid Report_IN')
-                            # worksheet = spreadsheet.get_worksheet(5)
-                            # yesterday_date = (datetime.now() - timedelta(days=1)).strftime('%m/%d')
-                            # week , month = week_of_month_corrected(yesterday_date)
-                            # worksheet.append_row([week,month,(date.today() - timedelta(1)).isoformat(),"","META","Facebook Ads",campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs])
-                
-# for campaign in campaigns :
-#     campaign.remote_read(fields=[Campaign.Field.name])
-#     if str.startswith(campaign[Campaign.Field.name],"ASIA_AOS"):
-#         print(f"Campaign ID: {campaign[Campaign.Field.id]}, Name: {campaign[Campaign.Field.name]}")
-
-
-# print(campaigns)
-# camp = Campaign('23855434919500430')
-# camp.remote_read(fields=[Campaign.Field.name])
-# print(camp[Campaign.Field.name])
-# print("Ad Set",camp.get_ad_sets())
-# insights = camp.get_insights()
-# print(insights)
-# print("item",insights.get_one())
-# print(campaigns)
-
-
+                    # credentials = {
+                    #     "type": os.getenv("CREDENTIAL_TYPE"),
+                    #     "project_id": os.getenv("CREDENTIAL_PROJECT_ID"),
+                    #     "private_key_id": os.getenv("CREDENTIAL_PRIVATE_KEY_ID"),
+                    #     "private_key": os.getenv("CREDENTIAL_PRIVATE_KEY"),
+                    #     "client_email": os.getenv("CREDENTIAL_CLIENT_EMAIL"),
+                    #     "client_id": os.getenv("CREDENTIAL_CLIENT_ID"),
+                    #     "auth_uri": os.getenv("CREDENTIAL_AUTH_URI"),
+                    #     "token_uri": os.getenv("CREDENTIAL_TOKEN_URI"),
+                    #     "auth_provider_x509_cert_url": os.getenv("CREDENTIAL_AUTH_PROVIDER_X509_CERT_URL"),
+                    #     "client_x509_cert_url": os.getenv("CREDENTIAL_CLIENT_X509_CERT_URL"),
+                    #     "universe_domain": os.getenv("CREDENTIAL_UNIVERSE_DOMAIN")
+                    #              }
+                    # gc = gspread.service_account_from_dict(credentials)
+                    # spreadsheet = gc.open('Paid Report_IN')
+                    # worksheet = spreadsheet.get_worksheet(5)
+                    # yesterday_date = (datetime.now() - timedelta(days=1)).strftime('%m/%d')
+                    # week , month = week_of_month_corrected(yesterday_date)
+                    # worksheet.append_row([week,month,(date.today() - timedelta(1)).isoformat(),"","META","Facebook Ads",campaign_name,adset[AdSet.Field.name],impressions,clicks,spends,installs])
+    else :
+        print("exited")
+        break
 
 
