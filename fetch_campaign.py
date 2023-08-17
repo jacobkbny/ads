@@ -15,6 +15,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import os
 from dotenv import load_dotenv
 from week_month import week_of_month_corrected
+from fetch_functions import get_campaigns,load_campaigns
 from datetime import datetime
 import time
 from facebook_business.exceptions import FacebookRequestError
@@ -28,8 +29,6 @@ FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
 
 my_account = AdAccount('act_'+AD_ACCOUNT_ID)
 
-campaigns = my_account.get_campaigns()
-for campaign in campaigns :
-        # Fetch the Campaign details
-    campaign.api_get(fields=[Campaign.Field.name])
-    print(f"Campaign ID: {campaign[Campaign.Field.id]}, Name: {campaign[Campaign.Field.name]}")
+camps = load_campaigns()
+
+get_campaigns(camps)
